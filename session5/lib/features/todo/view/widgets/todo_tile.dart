@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
-import 'app_icons.dart';
-import 'app_typography.dart';
+import '../../../../core/app_icons.dart';
+import '../../../../core/constants/theme/app_colors.dart';
+import '../../../../core/constants/theme/app_typography.dart';
+import '../../model/model/todo_model.dart';
 
 class TodoTile extends StatelessWidget {
-  final String title;
-  final bool isDone;
+  final TodoModel todoModel;
   final VoidCallback onToggle;
   final VoidCallback onDelete;
 
   const TodoTile({
     super.key,
-    required this.title,
-    required this.isDone,
+    required this.todoModel,
     required this.onToggle,
     required this.onDelete,
   });
@@ -23,21 +22,21 @@ class TodoTile extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       elevation: 0,
-      color: isDone ? AppColors.background : AppColors.card,
+      color: todoModel.isDone ? AppColors.background : AppColors.card,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
         leading: Checkbox(
-          value: isDone,
+          value: todoModel.isDone,
           onChanged: (_) => onToggle(),
           activeColor: AppColors.primary,
         ),
         title: Text(
-          title,
+          todoModel.title,
           style: AppTypography.todo.copyWith(
-            color: isDone ? AppColors.secondaryText : AppColors.text,
-            decoration: isDone ? TextDecoration.lineThrough : null,
+            color: todoModel.isDone ? AppColors.secondaryText : AppColors.text,
+            decoration: todoModel.isDone ? TextDecoration.lineThrough : null,
           ),
         ),
         trailing: IconButton(

@@ -1,48 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'app_colors.dart';
-import 'app_icons.dart';
-import 'app_typography.dart';
-import 'todo_tile.dart';
+import '../../../../core/app_icons.dart';
+import '../../../../core/constants/theme/app_colors.dart';
+import '../../../../core/constants/theme/app_typography.dart';
+import '../../view_model/cubit/todo_cubit.dart';
+import '../../model/model/dummy_data.dart';
+import '../widgets/todo_tile.dart';
 
-class TodoScreen extends StatefulWidget {
-  const TodoScreen({super.key});
+class TodoScreen extends StatelessWidget {
+  TodoScreen({super.key});
 
-  @override
-  State<TodoScreen> createState() => _TodoScreenState();
-}
-
-class _TodoScreenState extends State<TodoScreen> {
   final TextEditingController _controller = TextEditingController();
-  List<Map<String, dynamic>> todos = [
-    {'title': 'Buy Groceries', 'isDone': false},
-    {'title': 'Buy Groceries', 'isDone': false},
-    {'title': 'Buy Groceries', 'isDone': true},
-    {'title': 'Buy Groceries', 'isDone': false},
-  ];
-  void addTodo() {
-    setState(() {
-      todos.add({'title': _controller.text.trim(), 'isDone': false});
-    });
-  }
-
-  void deleteTodo(int index) {
-    setState(() {
-      todos.removeAt(index);
-    });
-  }
-
-  void toggleTodo(int index) {
-    setState(() {
-      todos[index]['isDone'] = !todos[index]['isDone'];
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +36,9 @@ class _TodoScreenState extends State<TodoScreen> {
               children: [
                 Expanded(
                   child: TextField(
-                    onSubmitted: (value) => addTodo(),
+                    onSubmitted: (value) => context
+                        .read<TodoCubit>()
+                        .addTodo(_controller.text.trim()),
                     controller: _controller,
                     decoration: InputDecoration(
                       hintText: 'What needs to be done?',
@@ -92,7 +63,9 @@ class _TodoScreenState extends State<TodoScreen> {
                   height: 52,
                   width: 52,
                   child: FilledButton(
-                    onPressed: addTodo,
+                    onPressed: () => context
+                        .read<TodoCubit>()
+                        .addTodo(_controller.text.trim()),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
@@ -107,19 +80,31 @@ class _TodoScreenState extends State<TodoScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: todos.length,
-              itemBuilder: (context, index) {
-                final todo = todos[index];
-                return TodoTile(
-                  title: todo['title'],
-                  isDone: todo['isDone'],
-                  onToggle: () => toggleTodo(index),
-                  onDelete: () => deleteTodo(index),
+            child: BlocBuilder<TodoCubit, TodoState>(builder: (context, state) {
+              if (state is TodoLoading) {
+                return const CircularProgressIndicator();
+              }
+              if (state is TodoError) {
+                return Center(child: Text(state.message));
+              }
+              if (state is TodoSuccess) {
+                return ListView.builder(
+                  itemCount: DummyData.todos.length,
+                  itemBuilder: (context, index) {
+                    final todo = DummyData.todos[index];
+                    return TodoTile(
+                      todoModel: todo,
+                      onToggle: () =>
+                          context.read<TodoCubit>().toggleTodo(index),
+                      onDelete: () =>
+                          context.read<TodoCubit>().deleteTodo(index),
+                    );
+                  },
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                 );
-              },
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-            ),
+              }
+              return const SizedBox();
+            }),
           ),
         ],
       ),
