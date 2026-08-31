@@ -5,8 +5,44 @@ import 'app_icons.dart';
 import 'app_typography.dart';
 import 'todo_tile.dart';
 
-class TodoScreen extends StatelessWidget {
+class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
+
+  @override
+  State<TodoScreen> createState() => _TodoScreenState();
+}
+
+class _TodoScreenState extends State<TodoScreen> {
+  final TextEditingController _controller = TextEditingController();
+  List<Map<String, dynamic>> todos = [
+    {'title': 'Buy Groceries', 'isDone': false},
+    {'title': 'Buy Groceries', 'isDone': false},
+    {'title': 'Buy Groceries', 'isDone': true},
+    {'title': 'Buy Groceries', 'isDone': false},
+  ];
+  void addTodo() {
+    setState(() {
+      todos.add({'title': _controller.text.trim(), 'isDone': false});
+    });
+  }
+
+  void deleteTodo(int index) {
+    setState(() {
+      todos.removeAt(index);
+    });
+  }
+
+  void toggleTodo(int index) {
+    setState(() {
+      todos[index]['isDone'] = !todos[index]['isDone'];
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +67,8 @@ class TodoScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    onSubmitted: (value) => addTodo(),
+                    controller: _controller,
                     decoration: InputDecoration(
                       hintText: 'What needs to be done?',
                       hintStyle: AppTypography.hint.copyWith(
@@ -54,7 +92,7 @@ class TodoScreen extends StatelessWidget {
                   height: 52,
                   width: 52,
                   child: FilledButton(
-                    onPressed: () {},
+                    onPressed: addTodo,
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
@@ -69,28 +107,18 @@ class TodoScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView(
+            child: ListView.builder(
+              itemCount: todos.length,
+              itemBuilder: (context, index) {
+                final todo = todos[index];
+                return TodoTile(
+                  title: todo['title'],
+                  isDone: todo['isDone'],
+                  onToggle: () => toggleTodo(index),
+                  onDelete: () => deleteTodo(index),
+                );
+              },
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                TodoTile(
-                  title: 'Buy Groceries',
-                  isDone: false,
-                  onToggle: () {},
-                  onDelete: () {},
-                ),
-                TodoTile(
-                  title: 'Walk the dog',
-                  isDone: false,
-                  onToggle: () {},
-                  onDelete: () {},
-                ),
-                TodoTile(
-                  title: 'Prepare the slides',
-                  isDone: true,
-                  onToggle: () {},
-                  onDelete: () {},
-                ),
-              ],
             ),
           ),
         ],

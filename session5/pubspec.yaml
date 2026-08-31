@@ -12,6 +12,8 @@ dependencies:
   flutter_bloc: ^8.1.5
   cupertino_icons: ^1.0.6
   google_fonts: ^8.2.1
+  bloc: ^8.1.4
+  meta: ^1.17.0
 
 dev_dependencies:
   flutter_test:
