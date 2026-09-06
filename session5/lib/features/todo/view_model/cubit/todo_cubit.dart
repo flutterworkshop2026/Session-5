@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:todo_app/features/todo/model/repository/todo_repository.dart';
 import '../../model/model/todo_model.dart';
+import '../../model/repository/todo_repository.dart';
 
 part 'todo_state.dart';
 
