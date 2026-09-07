@@ -14,6 +14,8 @@ dependencies:
   google_fonts: ^8.2.1
   bloc: ^8.1.4
   meta: ^1.17.0
+  dio: ^5.11.1
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
