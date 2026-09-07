@@ -5,7 +5,6 @@ import '../../../../core/app_icons.dart';
 import '../../../../core/constants/theme/app_colors.dart';
 import '../../../../core/constants/theme/app_typography.dart';
 import '../../view_model/cubit/todo_cubit.dart';
-import '../../model/model/dummy_data.dart';
 import '../widgets/todo_tile.dart';
 
 class TodoScreen extends StatelessWidget {
@@ -82,22 +81,22 @@ class TodoScreen extends StatelessWidget {
           Expanded(
             child: BlocBuilder<TodoCubit, TodoState>(builder: (context, state) {
               if (state is TodoLoading) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
               if (state is TodoError) {
                 return Center(child: Text(state.message));
               }
               if (state is TodoSuccess) {
                 return ListView.builder(
-                  itemCount: DummyData.todos.length,
+                  itemCount: state.todos.length,
                   itemBuilder: (context, index) {
-                    final todo = DummyData.todos[index];
+                    final todo = state.todos[index];
                     return TodoTile(
                       todoModel: todo,
                       onToggle: () =>
-                          context.read<TodoCubit>().toggleTodo(index),
+                          context.read<TodoCubit>().toggleTodo(todo.id!),
                       onDelete: () =>
-                          context.read<TodoCubit>().deleteTodo(index),
+                          context.read<TodoCubit>().deleteTodo(todo.id!),
                     );
                   },
                   padding: const EdgeInsets.symmetric(horizontal: 16),
