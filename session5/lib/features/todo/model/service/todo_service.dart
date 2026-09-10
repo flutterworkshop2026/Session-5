@@ -32,6 +32,6 @@ class TodoService {
   }
 
   Future<void> deleteTodo(int index) async {
-    await dio.patch('${ApiConstants.baseUrl}${ApiConstants.todos}/$index');
+    await dio.delete('${ApiConstants.baseUrl}${ApiConstants.todos}/$index');
   }
 }
