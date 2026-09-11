@@ -4,14 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app/core/api/dio_api.dart';
 import 'package:todo_app/core/local/local_storage.dart';
+import 'package:todo_app/features/auth/view/login.dart';
 import 'features/todo/model/model/todo_model.dart';
 import 'features/todo/model/repository/todo_repository.dart';
 import 'features/todo/model/service/todo_service.dart';
 import 'features/todo/view/screens/todo_screen.dart';
 import 'features/todo/view_model/cubit/todo_cubit.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized;
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await Hive.initFlutter();
   Hive.registerAdapter(TodoModelAdapter());
   await Hive.openBox<TodoModel>('todos');
@@ -35,7 +41,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: TodoScreen(),
+        home: LoginScreen(),
       ),
     );
   }

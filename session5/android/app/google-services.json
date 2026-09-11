@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "572413752865",
+    "project_id": "fir-firebase-c3208",
+    "storage_bucket": "fir-firebase-c3208.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572413752865:android:5cb1154cfdd4a087ce1560",
+        "android_client_info": {
+          "package_name": "com.example.session5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvjj-7Agj0Iu2c6on2vp-eMVOOhgwoRuQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
